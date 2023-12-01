@@ -14,7 +14,7 @@ export default {
       messageNumTable: [],
       dateArr: [],
       messageNumArr: [],
-
+      lineColorList: ['rgb(255,96,64)', 'rgb(232,143,20)', 'rgb(159,224,120)', 'rgb(42,122,120)', 'rgb(89,119,211)'],
       option: {
         // 设置标题
         title: {
@@ -68,7 +68,7 @@ export default {
           align:'right',//文字在前图标在后
           left:'3%',
           top:'20%',
-          data: ['近一周']
+          data: ['消息总数']
         },
         grid: {
           top:'30%',
@@ -99,35 +99,7 @@ export default {
           interval:1 //强制设置坐标轴分割间隔
         },
 
-        series: [{
-          name: '近一周',
-          type: 'line', //折线图line;柱形图bar;饼图pie
-          stack: '总量',
-          areaStyle: {
-            //显示区域颜色---渐变效果
-            color:{
-              type: 'linear',
-              x: 0,
-              y: 0,
-              x2: 0,
-              y2: 1,
-              colorStops: [{
-                offset: 0, color: 'rgb(255,200,213)' // 0% 处的颜色
-              }, {
-                offset: 1, color: '#ffffff' // 100% 处的颜色
-              }],
-              global: false // 缺省为 false
-            }
-          },
-          itemStyle: {
-            color: 'rgb(255,96,64)', //改变折线点的颜色
-            lineStyle: {
-              color: 'rgb(255,96,64)' //改变折线颜色
-            }
-
-          },
-          data: this.messageNumArr
-        }]
+        series: []
 
       }
     }
@@ -207,6 +179,51 @@ export default {
                       }
                       this.echartsInit()
                     });
+
+                this.$axios
+                    .post('http://localhost:8088/admin/devicemessagenum', {
+                      device_id: device_id,
+                    })
+                    .then(successResponse => {
+                      if (successResponse.data.code === 200) {
+                        let stringList = successResponse.data.stringList;
+                        let messageNumArr2 = [];
+                        for(let i=0; i<7; i++){
+                          messageNumArr2.push(stringList[i].substring(stringList[i].indexOf(':')+1))
+                          console.log(stringList[i].substring(stringList[i].indexOf(':')+1))
+                        }
+                        this.option2.series.push( {
+                          name: 'Device ' + device_id,
+                          type: 'line', //折线图line;柱形图bar;饼图pie
+                          // stack: '单个设备',
+                          areaStyle: {
+                            //显示区域颜色---渐变效果
+                            color:{
+                              type: 'linear',
+                              x: 0,
+                              y: 0,
+                              x2: 0,
+                              y2: 1,
+                              colorStops: [{
+                                offset: 0, color: 'rgb(220,220,220)' // 0% 处的颜色
+                              }, {
+                                offset: 1, color: '#ffffff' // 100% 处的颜色
+                              }],
+                              global: false // 缺省为 false
+                            }
+                          },
+                          itemStyle: {
+                            color: this.lineColorList[i+1], //改变折线点的颜色
+                            lineStyle: {
+                              color: this.lineColorList[i+1] //改变折线颜色
+                            }
+                          },
+                          data: messageNumArr2
+                        });
+                        this.option2.legend.data.push('Device ' + device_id);
+                        this.echartsInit2()
+                      }
+                    });
               }
 
 
@@ -231,9 +248,37 @@ export default {
                 this.messageNumArr.push(stringList[i].substring(stringList[i].indexOf(':')+1))
                 console.log(stringList[i].substring(stringList[i].indexOf(':')+1))
               }
-
             }
-            this.echartsInit2()
+            this.option2.series.push({
+              name: '消息总数',
+              type: 'line', //折线图line;柱形图bar;饼图pie
+              stack: '总量',
+              areaStyle: {
+                //显示区域颜色---渐变效果
+                color:{
+                  type: 'linear',
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [{
+                    offset: 0, color: 'rgb(220,220,220)' // 0% 处的颜色
+                  }, {
+                    offset: 1, color: '#ffffff' // 100% 处的颜色
+                  }],
+                  global: false // 缺省为 false
+                }
+              },
+              itemStyle: {
+                color: 'rgb(255,96,64)', //改变折线点的颜色
+                lineStyle: {
+                  color: 'rgb(255,96,64)' //改变折线颜色
+                }
+
+              },
+              data: this.messageNumArr
+            });
+            // this.echartsInit2()
           });
 
     },
@@ -249,7 +294,7 @@ export default {
     },
 
     echartsInit2(){
-      this.option2.series[0].data = this.messageNumArr;
+      // this.option2.series[0].data = this.messageNumArr;
       // this.option2.title.text = this.allMessageNum
       this.option2.xAxis.data = this.dateArr;
       var chartDom2 = document.getElementById('data_chart');
@@ -381,7 +426,7 @@ export default {
   position: absolute;
   top: 25%;
   left: 50%;
-  width: 600px;
-  height: 600px;
+  width: 650px;
+  height: 620px;
 }
 </style>

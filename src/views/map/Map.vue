@@ -1,6 +1,5 @@
 <script>
 //引入组件
-import { BaiduMap, BmScale, BmGeolocation } from 'vue-baidu-map'
 
 export default {
   data() {
@@ -22,9 +21,10 @@ export default {
       point_list: {},
       center_point: {
         lng: 120.17,
-        lat: 30.36
+        lat: 30.32
       },
       marker_visible: true,
+      tooMuch_visible: false
     };
   },
 
@@ -89,7 +89,15 @@ export default {
                   if (successResponse.data.code === 200) {
                     let path = [];
                     let messageNum = successResponse.data.message;
-                    for (let i = 0; i < messageNum; i++) {
+                    // console.log(messageNum)
+                    let start = 0;
+                    if (messageNum > 10){
+                      start = messageNum - 10;
+                      this.tooMuch_visible = true;
+                    }
+                    // console.log(messageNum)
+
+                    for (let i = start; i < messageNum; i++) {
                       let message_str = successResponse.data.stringList[i];
                       let temp_point = {
                         lat: parseFloat(message_str.substring(message_str.indexOf('lat') + 4, message_str.indexOf('lng') - 1)),
@@ -248,6 +256,7 @@ export default {
         </baidu-map>
       </el-card>
     </div>
+    <el-alert v-if="tooMuch_visible" title="消息数量太多，每个设备只显示最近10条" type="warning" show-icon class="title-style"></el-alert>
   </div>
 </template>
 
@@ -290,8 +299,11 @@ export default {
   z-index: 10;
 }
 
-.search {
-  height: 300px;
-  overflow: auto;
+.title-style {
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 60%;
+  height: 50px;
 }
 </style>
