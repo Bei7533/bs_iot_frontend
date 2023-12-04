@@ -14,6 +14,8 @@ var axios = require('axios');
 // 全局注册，之后可在其他组件中通过 this.$axios 发送数据
 Vue.prototype.$axios = axios;
 
+// document.documentElement.style.fontSize = window.screen.width / 500 + 'px'
+
 Vue.use(BaiduMap, {
   ak: 'IKCwjGT8mXlzt9WvPXBnEx6A3yrRia49'  //这个地方是官方提供的ak密钥
 })

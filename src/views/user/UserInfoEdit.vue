@@ -2,7 +2,7 @@
 export default {
     data() {
         return {
-            username: this.$route.query.username,
+            username: '',
             email: '',
             password: '',
             userDescipt: '',
@@ -25,36 +25,39 @@ export default {
     },
     methods: {
         fetchData() {
-            this.$axios
-                .post('http://localhost:8088/admin/userinfo', {
-                    username: this.username,
-                })
-                .then(successResponse => {
-                    if (successResponse.data.code === 200) {
-                        this.email = successResponse.data.userInfo.email;
-                        this.password = successResponse.data.userInfo.password;
-                        this.userDescipt = successResponse.data.userInfo.user_descript;
-                        console.log(this.userDescipt)
-                        this.tableData = [
-                            {
-                                type: '用户名',
-                                data: this.$route.query.username,
-                            },
-                            {
-                                type: '邮箱',
-                                data: this.email,
-                            },
-                            {
-                                type: '个人描述',
-                                data: this.userDescipt,
-                            }
-                        ]
-                    } else if (successResponse.data.code === 404) {
-                        alert('访问用户失败')
-                    }
-                })
-                .catch(failResponse => {
-                });
+          console.log('fetch')
+          if(this.username === '')
+            this.username = this.$route.query.username;
+          this.$axios
+              .post('http://localhost:8088/admin/userinfo', {
+                  username: this.username,
+              })
+              .then(successResponse => {
+                  if (successResponse.data.code === 200) {
+                      this.email = successResponse.data.userInfo.email;
+                      this.password = successResponse.data.userInfo.password;
+                      this.userDescipt = successResponse.data.userInfo.user_descript;
+                      // console.log(this.userDescipt)
+                      this.tableData = [
+                          {
+                              type: '用户名',
+                              data: this.username,
+                          },
+                          {
+                              type: '邮箱',
+                              data: this.email,
+                          },
+                          {
+                              type: '个人描述',
+                              data: this.userDescipt,
+                          }
+                      ]
+                  } else if (successResponse.data.code === 404) {
+                      alert('访问用户失败')
+                  }
+              })
+              .catch(failResponse => {
+              });
 
         },
 
@@ -70,6 +73,11 @@ export default {
                 //   path: '/user/edituserinfo',
                 //   query: { username: this.username }
                 // });
+            } else if (key === '1-3') {
+              this.$router.push({
+                path: '/UserHome',
+                query: { username: this.username }
+              });
             } else if (key === '2') {
                 this.$router.push({
                     path: '/user/map',
@@ -92,7 +100,7 @@ export default {
             this.editRow = "请输入你的新" + row.type;
             this.editIndex = index;
             this.dialogFormVisible = true;
-            console.log(this.editRow);
+            console.log(this.editIndex);
         },
 
         handleEdit() {
@@ -102,6 +110,8 @@ export default {
             }
             this.dialogFormVisible = false;
             this.tableData[this.editIndex].data = this.editContent;
+            // console.log(this.editIndex)
+            const index = this.editIndex;
             this.$axios
                 .post('http://localhost:8088/admin/userinfoedit', {
                     username: this.username,
@@ -110,11 +120,14 @@ export default {
                 })
                 .then(successResponse => {
                     if (successResponse.data.code === 200) {
-                        alert('修改成功')
+                      alert('修改成功')
+                      this.editIndex = index;
+                      console.log(this.editIndex)
                         if (this.editIndex === 1) this.email = this.editContent;
                         else if (this.editIndex === 2) this.userDescipt = this.editContent;
                         else if (this.editIndex === 0)
                             this.username = this.editContent;
+
                     } else if (successResponse.data.code === 250) {
                         alert('用户名已经存在')
                     }
@@ -183,6 +196,7 @@ export default {
                 </template>
                 <el-menu-item index="1-1">查看信息</el-menu-item>
                 <el-menu-item index="1-2">编辑信息</el-menu-item>
+                <el-menu-item index="1-3">回到首页</el-menu-item>
             </el-submenu>
             <el-menu-item index="2">
                 <template slot="title">

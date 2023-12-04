@@ -23,6 +23,11 @@ export default {
           path: '/user/userinfoedit',
           query: { username: this.username }
         });
+      }else if (key === '1-3') {
+        // this.$router.push({
+        //   path: '/user/UserHome',
+        //   query: { username: this.username }
+        // });
       } else if (key === '2') {
         this.$router.push({
           path: '/user/map',
@@ -57,6 +62,7 @@ export default {
         </template>
         <el-menu-item index="1-1">查看信息</el-menu-item>
         <el-menu-item index="1-2">编辑信息</el-menu-item>
+        <el-menu-item index="1-3">回到首页</el-menu-item>
       </el-submenu>
       <el-menu-item index="2">
         <template slot="title">

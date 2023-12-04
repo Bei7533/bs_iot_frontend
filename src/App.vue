@@ -19,6 +19,13 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+/* 手机端样式 */
+@media (max-width: 767px) {
+  #app {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+}
 
 nav {
   padding: 30px;

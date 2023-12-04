@@ -34,7 +34,7 @@
   position: relative;
   top: 30%;
   left: 150px;
-  font-size: 60px;
+  font-size: 63px;
   color: rgba(255, 255, 255, 0.85);
   text-align: left;
 
@@ -44,7 +44,7 @@
   position: relative;
   top: 25%;
   left: 150px;
-  font-size: 60px;
+  font-size: 63px;
   color: rgba(255, 255, 255, 0.85);
   text-align: left;
 

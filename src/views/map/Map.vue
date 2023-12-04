@@ -44,6 +44,11 @@ export default {
           path: '/user/userinfoedit',
           query: { username: this.username }
         });
+      } else if (key === '1-3') {
+        this.$router.push({
+          path: '/UserHome',
+          query: { username: this.username }
+        });
       } else if (key === '2') {
         // this.$router.push({
         //   path: '/user/map',
@@ -115,6 +120,7 @@ export default {
                       let opts = {
                         width: 228,     // 信息窗口宽度
                         height: 100,     // 信息窗口高度
+                        // font_size: 100,
                         title: "设备 "+message_str.substring(message_str.indexOf('device_id') + 10, message_str.indexOf('alert') - 1)+" 信息详情", // 信息窗口标题
                       }
                       let infoWindow = new BMap.InfoWindow("上线时间："+message_str.substring(message_str.indexOf('log_time') + 9, message_str.length - 3)+"  经度："+ temp_point.lng+" 纬度："+ temp_point.lat + "    警告信息：" + message_str.substring(message_str.indexOf('alert') + 6, message_str.indexOf('lat') - 1), opts);  // 创建信息窗口对象
@@ -224,6 +230,7 @@ export default {
         </template>
         <el-menu-item index="1-1">查看信息</el-menu-item>
         <el-menu-item index="1-2">编辑信息</el-menu-item>
+        <el-menu-item index="1-3">回到首页</el-menu-item>
       </el-submenu>
       <el-menu-item index="2">
         <template slot="title">
@@ -264,10 +271,10 @@ export default {
 <style scoped>
 .body {
   position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: auto;
   height: auto;
   z-index: 0;
@@ -285,7 +292,7 @@ export default {
 /* 给个宽高 */
 .bm-view {
   position: absolute;
-  left: 0px;
+  left: 0;
   top: 60px;
   height: 90%;
   width: 100%;

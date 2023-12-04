@@ -9,6 +9,10 @@ import user_info_edit from "../views/user/UserInfoEdit.vue"
 import map from "../views/map/Map.vue"
 import device from "../views/device/Device.vue"
 import data from "../views/device/Data.vue"
+import phoneHome from "@/views/mobile/phoneHome.vue";
+import PhoneLogin from "@/views/mobile/phoneLogin.vue";
+import phoneRegister from "@/views/mobile/phoneRegister.vue";
+
 
 Vue.use(Router)
 
@@ -17,17 +21,17 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: home
+      component: window.innerWidth < 768 ? phoneHome : home
     },
     {
       path: '/login',
       name: 'Login',
-      component: login
+      component: window.innerWidth < 768 ? PhoneLogin : login
     },
     {
       path: '/Register',
       name: 'register',
-      component: register
+      component: window.innerWidth < 768 ? phoneRegister : register
     },
     {
       path: '/UserHome',
